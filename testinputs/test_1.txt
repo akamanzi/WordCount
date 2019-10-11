@@ -1,0 +1,4 @@
+This U+0000 is a first testfile Ω€®Ŧ¥↑ıØÞöäüß¡
+It has multiple lines of test
+It als has some functions like print()
+��������������������������������������������������������������������������
