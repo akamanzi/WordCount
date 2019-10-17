@@ -24,11 +24,10 @@ if __name__ == "__main__":
 			global total_words, total_lines, total_bytes
 
 			try:
-				with open(file, 'r', encoding='utf-8') as f:
-					for line in f:
-						num_of_lines += 1
-						num_of_words += len(line.split())
-
+				with open(file, 'rb') as f:
+					file_content = f.read()
+					num_of_lines = len(file_content.splitlines())
+					num_of_words = len(file_content.split())
 					total_words += num_of_words
 					total_lines += num_of_lines
 					total_bytes += f.tell()
@@ -51,20 +50,6 @@ if __name__ == "__main__":
 					results.clear()
 			except OSError:
 				print("we don't handle that situation yet!")
-			except UnicodeDecodeError:
-				with open(file, 'rb') as f:
-					for line in f:
-						num_of_lines+=1
-						line_in_uni = line.decode('latin-1')
-						num_of_words += len(line_in_uni.split())
-					total_words += num_of_words
-					total_bytes += f.tell()
-					total_lines += num_of_lines
-					print('\t',num_of_lines-1, end='')
-					print('\t',num_of_words, end='')
-					print('\t', f.tell(), end=' ')
-					print('\t',f.name)
-
 		if len(file_names) > 1:
 			if no_flag:
 				results.extend([total_lines, total_words, total_bytes, 'total'])
@@ -114,35 +99,3 @@ if __name__ == "__main__":
 		openfile(args.filename, flag_list)
 
 	handle_arguments()
-
-	# #check for flags and files in the list
-	# if len(sys.argv) == 1:
-	# 	missing_file_missing()
-	#
-	# elif sys.argv[1][0] == '-':
-	# 	if len(sys.argv[1]) == 1:
-	# 		missing_file_missing()
-	# 	else:
-	# 		flag_character = '-'
-	# 		flags = [flag for flag in sys.argv if flag[0].lower() == flag_character]
-	# 		last_flag = flags[-1]
-	# 		last_flag_index = sys.argv.index(last_flag)
-	# 		files_in_list = [single_file for single_file in sys.argv[1:] if single_file[0].lower() != flag_character]
-	# 		file_in_argument = sys.argv[last_flag_index+1:]
-	# 		used_flags = []
-	# 		if len(flags) >= 1:
-	# 			for i in flags:
-	# 				for j in i:
-	# 					used_flags.append(j)
-	# 			if any(i in allowed_options for i in used_flags):
-	# 				openfile(file_in_argument, used_flags)
-	# 			else:
-	# 				print("wrong flag used")
-	#
-	# 		else:
-	# 			print("breaking out")
-	# 			pass
-	#
-	# else:
-	# 	argument = []
-	# 	openfile(sys.argv[1:], argument)
