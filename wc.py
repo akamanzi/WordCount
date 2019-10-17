@@ -99,7 +99,7 @@ if __name__ == "__main__":
 		parser.add_argument("-c", help="output number of bytes", action='store_true')
 		parser.add_argument("filename", nargs='+')
 		if len(sys.argv) == 1:
-			sys.stderr.write("we don't handle that situation yet!\n")
+			sys.stdout.write("we don't handle that situation yet!\n")
 			sys.exit()
 		args = parser.parse_args()
 		flag_list = []
