@@ -24,7 +24,7 @@ if __name__ == "__main__":
 			global total_words, total_lines, total_bytes
 
 			try:
-				with open(file, 'r') as f:
+				with open(file, 'r', encoding='utf-8') as f:
 					for line in f:
 						num_of_lines += 1
 						num_of_words += len(line.split())

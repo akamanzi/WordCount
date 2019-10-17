@@ -42,12 +42,6 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
         expected_output = b'\t 355\t testinputs/test_1.txt\n'
         return self.assertEqual(command,expected_output)
 
-
-    def test_single_file_with_line_word_flags(self):
-        command = subprocess.check_output('python3 wc.py -wl testinputs/test_1.txt', shell=True)
-        expected_output = b'\t 4\t 21\t testinputs/test_1.txt\n'
-        return self.assertEqual(command, expected_output)
-
     def test_single_file_with_line_bytes_flags(self):
         command = subprocess.check_output('python3 wc.py -l -c testinputs/test_1.txt', shell=True)
         expected_output = b'\t 4\t 355\t testinputs/test_1.txt\n'
@@ -62,6 +56,27 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
         command = subprocess.check_output('python3 wc.py -w -c -l testinputs/test_1.txt', shell=True)
         expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n'
         return self.assertEqual(command, expected_output)
+
+    def test_single_file_with_combined_line_word_flags(self):
+        command = subprocess.check_output('python3 wc.py -wl testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 4\t 21\t testinputs/test_1.txt\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_single_file_with_combined_word_byte_flags(self):
+        command = subprocess.check_output('python3 wc.py -wc testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 21\t 355\t testinputs/test_1.txt\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_single_file_with_combined_line_byte_flags(self):
+        command = subprocess.check_output('python3 wc.py -lc testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 4\t 355\t testinputs/test_1.txt\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_single_file_with_combined_line_byte_word_flags(self):
+        command = subprocess.check_output('python3 wc.py -lcw testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n'
+        return self.assertEqual(command, expected_output)
+
 
 
 class MissingArgumentsTestCases(unittest.TestCase):
@@ -100,10 +115,26 @@ class MultipleFilesWithFlagsTestCases(unittest.TestCase):
         expected_output = b'\t 4\t 21\t testinputs/test_1.txt\n\t 1\t 8\t testinputs/test_3.txt\n\t 5\t 29\t total\n'
         return self.assertEqual(command, expected_output)
 
+    def test_multiple_files_with_combined_line_word_flag(self):
+        command = subprocess.check_output('python3 wc.py -lw testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 4\t 21\t testinputs/test_1.txt\n\t 1\t 8\t testinputs/test_3.txt\n\t 5\t 29\t total\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_multiple_files_with_combined_line_byte_flag(self):
+        command = subprocess.check_output('python3 wc.py -lc testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 4\t 355\t testinputs/test_1.txt\n\t 1\t 43\t testinputs/test_3.txt\n\t 5\t 398\t total\n'
+        return self.assertEqual(command, expected_output)
+
     def test_multiple_files_with_line_word_byte_flag(self):
         command = subprocess.check_output('python3 wc.py -l -w -c testinputs/test_1.txt testinputs/test_3.txt', shell=True)
         expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n\t 1\t 8\t 43\t testinputs/test_3.txt\n\t 5\t 29\t 398\t total\n'
         return self.assertEqual(command, expected_output)
+
+    def test_multiple_files_with_combined_line_word_byte_flag(self):
+        command = subprocess.check_output('python3 wc.py -lwc testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n\t 1\t 8\t 43\t testinputs/test_3.txt\n\t 5\t 29\t 398\t total\n'
+        return self.assertEqual(command, expected_output)
+
 
 class BinaryFilesTestCases(unittest.TestCase):
 
@@ -112,7 +143,37 @@ class BinaryFilesTestCases(unittest.TestCase):
         expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n\t 343\t 2728\t 60813 \t testinputs/Bob_dylan.jpeg\n\t 348\t 2749\t 61168\t total\n'
         return self.assertEqual(command,expected_output)
 
+    def test_binary_file(self):
+        command = subprocess.check_output('python3 wc.py testinputs/Bob_dylan.jpeg', shell=True)
+        expected_output = b'\t 343\t 2728\t 60813 \t testinputs/Bob_dylan.jpeg\n'
+        return self.assertEqual(command, expected_output)
 
+class UnicodeTestCases(unittest.TestCase):
+
+    def test_georgian_text(self):
+        command = subprocess.check_output('python3 wc.py testinputs/georgian.txt', shell=True)
+        expected_output = b'\t 7\t 44\t 1115\t testinputs/georgian.txt\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_ethiopian_text(self):
+        command = subprocess.check_output('python3 wc.py testinputs/ethiopian.txt', shell=True)
+        expected_output = b'\t 18\t 83\t 1077\t testinputs/ethiopian.txt\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_drawing_text(self):
+        command = subprocess.check_output('python3 wc.py testinputs/drawing_file.txt', shell=True)
+        expected_output = b'\t 7\t 101\t 1249\t testinputs/drawing_file.txt\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_file_without_extension(self):
+        command = subprocess.check_output('python3 wc.py testinputs/no_extension', shell=True)
+        expected_output = b'\t 8\t 54\t 718\t testinputs/no_extension\n'
+        return self.assertEqual(command, expected_output)
+
+    def test_unicode_dot_py(self):
+        command = subprocess.check_output('python3 wc.py testinputs/test_unicode.py', shell=True)
+        expected_output = b'\t 4\t 26\t 655\t testinputs/test_unicode.py\n'
+        return self.assertEqual(command, expected_output)
 
 if __name__ == '__main__':
     unittest.main()
