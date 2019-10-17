@@ -49,13 +49,13 @@ b'\\t 21\\t 355\\t testinputs/test_1.txt\\n'
 b'\\t 4\\t 21\\t 355\\t testinputs/test_1.txt\\n'
 
 >>> subprocess.check_output('python3 wc.py - testinputs/test_1.txt', shell=True)
-b'Wc: File missing\\n'
+b"we don't handle that situation yet!\\n\\t 4\\t 21\\t 355\\t testinputs/test_1.txt\\n\\t 4\\t 21\\t 355\\t total\\n"
 
 >>> subprocess.check_output('python3 wc.py -', shell=True)
-b'Wc: File missing\\n'
+b"we don't handle that situation yet!\\n"
 
 >>> subprocess.check_output('python3 wc.py', shell=True)
-b'Wc: File missing\\n'
+b"we don't handle that situation yet!\\n"
 
 ################ Test Suite for multiple files with no flags #################
 >>> subprocess.check_output('python3 wc.py testinputs/test_1.txt testinputs/test_3.txt', shell=True)
@@ -85,7 +85,7 @@ b'\\t 4\\t testinputs/test_1.txt\\n'
 
 ########### Testcase against multiple files including binary files ###########3
 >>> subprocess.check_output('python3 wc.py testinputs/test_1.txt testinputs/Bob_dylan.jpeg', shell=True)
-b'\\t 4\\t 21\\t 355\\t testinputs/test_1.txt\\n\\t 3\\t 21\\t 355 \\t testinputs/test_1.txt\\n\\t 8\\t 42\\t 710\\t total\\n'
+b'\\t 4\\t 21\\t 355\\t testinputs/test_1.txt\\n\\t 343\\t 2728\\t 60813 \\t testinputs/Bob_dylan.jpeg\\n\\t 348\\t 2749\\t 61168\\t total\\n'
 '''
 
 

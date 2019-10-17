@@ -1,5 +1,6 @@
 if __name__ == "__main__":
 	import sys
+	import argparse
 	script_name = sys.argv[0]
 	allowed_options = ['l', 'w', 'c']
 	line_flag = 'l'
@@ -31,7 +32,7 @@ if __name__ == "__main__":
 					total_words += num_of_words
 					total_lines += num_of_lines
 					total_bytes += f.tell()
-					if len(argument) > 1:
+					if len(argument) >= 1:
 						global multiple_flags
 						multiple_flags = True
 						if line_flag in argument:
@@ -49,7 +50,7 @@ if __name__ == "__main__":
 					print_results(results)
 					results.clear()
 			except OSError:
-				print("miniwc: we don't handle that situation yet!")
+				print("we don't handle that situation yet!")
 			except UnicodeDecodeError:
 				with open(file, 'rb') as f:
 					for line in f:
@@ -90,34 +91,58 @@ if __name__ == "__main__":
 		print("Wc: File missing")
 
 
-	#check for flags and files in the list
-	if len(sys.argv) == 1:
-		missing_file_missing()
+	def handle_arguments():
+		# Initialise arguments
+		parser = argparse.ArgumentParser(description="Program that counts words, lines and size of a given file")
+		parser.add_argument("-l", help="output number of lines", action='store_true')
+		parser.add_argument("-w", help="output number of words", action='store_true')
+		parser.add_argument("-c", help="output number of bytes", action='store_true')
+		parser.add_argument("filename", nargs='+')
+		if len(sys.argv) == 1:
+			sys.stderr.write("we don't handle that situation yet!\n")
+			sys.exit()
+		args = parser.parse_args()
+		flag_list = []
+		if args.l:
+			flag_list.append(line_flag)
+		if args.w:
+			flag_list.append(word_flag)
+		if args.c:
+			flag_list.append(byte_flag)
 
-	elif sys.argv[1][0] == '-':
-		if len(sys.argv[1]) == 1:
-			missing_file_missing()
-		else:
-			flag_character = '-'
-			flags = [flag for flag in sys.argv if flag[0].lower() == flag_character]
-			last_flag = flags[-1]
-			last_flag_index = sys.argv.index(last_flag)
-			files_in_list = [single_file for single_file in sys.argv[1:] if single_file[0].lower() != flag_character]
-			file_in_argument = sys.argv[last_flag_index+1:]
-			used_flags = []
-			if len(flags) >= 1:
-				for i in flags:
-					for j in i:
-						used_flags.append(j)
-				if any(i in allowed_options for i in used_flags):
-					openfile(file_in_argument, used_flags)
-				else:
-					print("wrong flag used")
+		# print(args.filename, flag_list)
+		openfile(args.filename, flag_list)
 
-			else:
-				print("breaking out")
-				pass
+	handle_arguments()
 
-	else:
-		argument = []
-		openfile(sys.argv[1:], argument)
+	# #check for flags and files in the list
+	# if len(sys.argv) == 1:
+	# 	missing_file_missing()
+	#
+	# elif sys.argv[1][0] == '-':
+	# 	if len(sys.argv[1]) == 1:
+	# 		missing_file_missing()
+	# 	else:
+	# 		flag_character = '-'
+	# 		flags = [flag for flag in sys.argv if flag[0].lower() == flag_character]
+	# 		last_flag = flags[-1]
+	# 		last_flag_index = sys.argv.index(last_flag)
+	# 		files_in_list = [single_file for single_file in sys.argv[1:] if single_file[0].lower() != flag_character]
+	# 		file_in_argument = sys.argv[last_flag_index+1:]
+	# 		used_flags = []
+	# 		if len(flags) >= 1:
+	# 			for i in flags:
+	# 				for j in i:
+	# 					used_flags.append(j)
+	# 			if any(i in allowed_options for i in used_flags):
+	# 				openfile(file_in_argument, used_flags)
+	# 			else:
+	# 				print("wrong flag used")
+	#
+	# 		else:
+	# 			print("breaking out")
+	# 			pass
+	#
+	# else:
+	# 	argument = []
+	# 	openfile(sys.argv[1:], argument)
