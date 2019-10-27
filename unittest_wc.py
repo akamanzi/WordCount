@@ -42,6 +42,11 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
         expected_output = b'\t 355\t testinputs/test_1.txt\n'
         return self.assertEqual(command,expected_output)
 
+    def test_single_file_with_max_line_length_flag(self):
+        command = subprocess.check_output('python3 wc.py -L testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 75\t testinputs/test_1.txt\n'
+        return self.assertEqual(command,expected_output)
+
     def test_single_file_with_line_bytes_flags(self):
         command = subprocess.check_output('python3 wc.py -l -c testinputs/test_1.txt', shell=True)
         expected_output = b'\t 4\t 355\t testinputs/test_1.txt\n'
@@ -76,6 +81,11 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
         command = subprocess.check_output('python3 wc.py -lcw testinputs/test_1.txt', shell=True)
         expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n'
         return self.assertEqual(command, expected_output)
+
+    def test_single_file_with_combined_maxline_word_byte_line_flag(self):
+        command = subprocess.check_output('python3 wc.py -lcwL testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 4\t 21\t 75\t 355\t testinputs/test_1.txt\n'
+        return self.assertEqual(command,expected_output)
 
 
 
@@ -135,6 +145,17 @@ class MultipleFilesWithFlagsTestCases(unittest.TestCase):
         expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n\t 1\t 8\t 43\t testinputs/test_3.txt\n\t 5\t 29\t 398\t total\n'
         return self.assertEqual(command, expected_output)
 
+    @unittest.expectedFailure
+    def test_help_flag(self):
+        command = subprocess.check_output('python3 wc.py --help', shell=True)
+        expected_output = b'\t 4\t 21\t 355\t testinputs/test_1.txt\n\t 1\t 8\t 43\t testinputs/test_3.txt\n\t 5\t 29\t 398\t total\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_version_flag(self):
+        command = subprocess.check_output('python3 wc.py --version', shell=True)
+        expected_output = b'wc.py 1.0\n'
+        return self.assertEqual(command,expected_output)
+
 
 class BinaryFilesTestCases(unittest.TestCase):
     @unittest.expectedFailure
@@ -175,6 +196,7 @@ class UnicodeTestCases(unittest.TestCase):
         command = subprocess.check_output('python3 wc.py testinputs/test_unicode.py', shell=True)
         expected_output = b'\t 4\t 26\t 654\t testinputs/test_unicode.py\n'
         return self.assertEqual(command, expected_output)
+
 
 if __name__ == '__main__':
     unittest.main()
