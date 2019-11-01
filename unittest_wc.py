@@ -1,5 +1,7 @@
 import unittest
 import subprocess
+from unittest.mock import patch
+import wc
 
 class SingleFileTestCases(unittest.TestCase):
 
@@ -44,7 +46,7 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
 
     def test_single_file_with_max_line_length_flag(self):
         command = subprocess.check_output('python3 wc.py -L testinputs/test_1.txt', shell=True)
-        expected_output = b'\t 75\t testinputs/test_1.txt\n'
+        expected_output = b'\t 74\t testinputs/test_1.txt\n'
         return self.assertEqual(command,expected_output)
 
     def test_single_file_with_line_bytes_flags(self):
@@ -84,8 +86,31 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
 
     def test_single_file_with_combined_maxline_word_byte_line_flag(self):
         command = subprocess.check_output('python3 wc.py -lcwL testinputs/test_1.txt', shell=True)
-        expected_output = b'\t 4\t 21\t 75\t 355\t testinputs/test_1.txt\n'
+        expected_output = b'\t 4\t 21\t 355\t 74\t testinputs/test_1.txt\n'
         return self.assertEqual(command,expected_output)
+
+    def test_single_file_with_combined_maxline_line_flag(self):
+        command = subprocess.check_output('python3 wc.py -lL testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 4\t 74\t testinputs/test_1.txt\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_single_file_with_combined_maxline_byte_flag(self):
+        command = subprocess.check_output('python3 wc.py -Lc testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 355\t 74\t testinputs/test_1.txt\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_single_file_with_combined_maxline_maxline_flag(self):
+        command = subprocess.check_output('python3 wc.py -LL testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 74\t testinputs/test_1.txt\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_single_file_with_combined_maxline_word_flag(self):
+        command = subprocess.check_output('python3 wc.py -Lw testinputs/test_1.txt', shell=True)
+        expected_output = b'\t 21\t 74\t testinputs/test_1.txt\n'
+        return self.assertEqual(command,expected_output)
+
+
+
 
 
 
@@ -98,11 +123,6 @@ class MissingArgumentsTestCases(unittest.TestCase):
 
     def test_missing_flag(self):
         command = subprocess.check_output('python3 wc.py -', shell=True)
-        expected_output = b"we don't handle that situation yet!\n"
-        return self.assertEqual(command, expected_output)
-
-    def test_missing_argument(self):
-        command = subprocess.check_output('python3 wc.py', shell=True)
         expected_output = b"we don't handle that situation yet!\n"
         return self.assertEqual(command, expected_output)
 
@@ -156,6 +176,29 @@ class MultipleFilesWithFlagsTestCases(unittest.TestCase):
         expected_output = b'wc.py 1.0\n'
         return self.assertEqual(command,expected_output)
 
+    def test_multiple_files_with_combined_maxline_word_byte_line_flag(self):
+        command = subprocess.check_output('python3 wc.py -lcwL testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 4\t 21\t 355\t 74\t testinputs/test_1.txt\n\t 1\t 8\t 43\t 42\t testinputs/test_3.txt\n\t 5\t 29\t 398\t 42\t total\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_multiple_files_with_combined_maxline_line_flag(self):
+        command = subprocess.check_output('python3 wc.py -lL testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 4\t 74\t testinputs/test_1.txt\n\t 1\t 42\t testinputs/test_3.txt\n\t 5\t 42\t total\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_multiple_files_with_combined_maxline_word_flag(self):
+        command = subprocess.check_output('python3 wc.py -Lw testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 21\t 74\t testinputs/test_1.txt\n\t 8\t 42\t testinputs/test_3.txt\n\t 29\t 42\t total\n'
+        return self.assertEqual(command,expected_output)
+
+    def test_multiple_files_with_combined_maxline_byte_flag(self):
+        command = subprocess.check_output('python3 wc.py -Lc testinputs/test_1.txt testinputs/test_3.txt', shell=True)
+        expected_output = b'\t 355\t 74\t testinputs/test_1.txt\n\t 43\t 42\t testinputs/test_3.txt\n\t 398\t 42\t total\n'
+        return self.assertEqual(command,expected_output)
+
+
+
+
 
 class BinaryFilesTestCases(unittest.TestCase):
     @unittest.expectedFailure
@@ -197,6 +240,13 @@ class UnicodeTestCases(unittest.TestCase):
         expected_output = b'\t 4\t 26\t 654\t testinputs/test_unicode.py\n'
         return self.assertEqual(command, expected_output)
 
+class SdtInTestCases(unittest.TestCase):
+
+    @patch('builtins.input', return_value="Hi Arnold")
+    def test_one_line_stdin(self, input):
+        command = subprocess.check_output('python3 wc.py', shell=True)
+        expected_output = b'\t 0 \t 2 \t 9\n'
+        return self.assertEqual(command, expected_output)
 
 if __name__ == '__main__':
     unittest.main()
