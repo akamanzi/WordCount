@@ -17,14 +17,27 @@ total_line_length = 0
 no_flag = False
 multiple_flags = False
 
-def count_longest_line(file_name):
-	large_line = ''
-	large_line_len = 0
+def count_max_line_length(file_name):
+	try:
+		with open(file_name, 'r', encoding='utf-8') as f:
+			file_content = f.read()
+			line = file_content.split('\n')
+			large_line_len = 0
+			for l in line:
+				if len(l) > large_line_len:
+					large_line_len = len(l)
+	except UnicodeDecodeError:
+		large_line_len = open_binary_file(file_name)
+	return large_line_len
+
+def open_binary_file(file_name):
 	with open(file_name, 'rb') as f:
-		for line in f:
-			if len(line) > large_line_len:
-				large_line_len = len(line)
-				large_line = line
+		file_content = f.read()
+		line = file_content.splitlines()
+		large_line_len = 0
+		for l in line:
+			if len(l) > large_line_len:
+				large_line_len = len(l)
 	return large_line_len
 
 def openfile(file_names, argument):
@@ -56,7 +69,7 @@ def openfile(file_names, argument):
 					if byte_flag in argument:
 						results.extend([f.tell()])
 					if max_length in argument:
-						max_line_length = count_longest_line(file)
+						max_line_length = count_max_line_length(file)
 						total_line_length += max_line_length
 						results.extend([max_line_length])
 					results.extend([file])
@@ -80,18 +93,14 @@ def openfile(file_names, argument):
 			if byte_flag in argument:
 				results.extend([total_bytes])
 			if max_length in argument:
-				pass
-				#results.extend([total_line_length])
+				results.extend([max_line_length])
 			results.extend(['total'])
 		print_results(results)
 	#return results
 
 def print_results(results):
-	sorted_integers = sorted([i for i in results if type(i) is int])
-	sorted_file_names = sorted([i for i in results if type(i) is str])
-	sorted_result = sorted_integers+sorted_file_names
-	for result in sorted_result:
-		if result == sorted_result[-1]:
+	for result in results:
+		if result == results[-1]:
 			print('\t', result)
 		else:
 			print('\t', result, end='')
@@ -99,6 +108,12 @@ def print_results(results):
 # TODO: pass arguments
 def missing_file_missing():
 	print("Wc: File missing")
+
+def handle_stdin(input):
+	line_count = len(input.split('\n')) - 1
+	word_count = len(input.split())
+	byte_count = len(input)
+	print('\t', line_count, '\t', word_count, '\t', byte_count)
 
 # TODO: pass arguments and return list of results
 def handle_arguments():
@@ -120,11 +135,14 @@ def handle_arguments():
 						default=argparse.SUPPRESS)
 	parser.add_argument("--version",  help="outputs version of wc", action='version',
 						version='%(prog)s 1.0')
-	parser.add_argument("-L", help="output length of the longest line" ,action='store_true')
+	parser.add_argument("-L", help="output length of the longest line", action='store_true')
 	parser.add_argument("filename", nargs='+')
+
 	if len(sys.argv) == 1:
-		sys.stdout.write("we don't handle that situation yet!\n")
+		stdin_content = sys.stdin.read()
+		handle_stdin(stdin_content)
 		sys.exit()
+
 	args = parser.parse_args()
 	flag_list = []
 	list_of_arguments = []
@@ -132,11 +150,12 @@ def handle_arguments():
 		flag_list.append(line_flag)
 	if args.w:
 		flag_list.append(word_flag)
+	if args.m:
+		flag_list.append()
 	if args.c:
 		flag_list.append(byte_flag)
 	if args.L:
 		flag_list.append(max_length)
-
 
 	# print(args.filename, flag_list)
 	#openfile(args.filename, flag_list)
