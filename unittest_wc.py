@@ -3,6 +3,11 @@ import subprocess
 from unittest.mock import patch
 import wc
 
+
+def cmd_command(flags, test_inputs):
+    return subprocess.check_output('python3 wc.py %s %s' % (flags, " ".join(test_inputs)), shell=True)
+
+
 class SingleFileTestCases(unittest.TestCase):
 
     def test_single_file_textfile1(self):
@@ -247,6 +252,86 @@ class SdtInTestCases(unittest.TestCase):
         command = subprocess.check_output('python3 wc.py', shell=True)
         expected_output = b'\t 0 \t 2 \t 9\n'
         return self.assertEqual(command, expected_output)
+
+class CharacterFlagCombinationSingleFileTestCases(unittest.TestCase):
+
+        test_inputs = ['testinputs/test_3.txt']
+        def test_char_lines_combination(self):
+            output = b'\t 1\t 43\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-ml", self.test_inputs), output)
+
+        def test_char_byte_combination(self):
+            output = b'\t 43\t 43\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mc", self.test_inputs), output)
+
+        def test_char_word_combination(self):
+            output = b'\t 8\t 43\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mw", self.test_inputs), output)
+
+        def test_char_char_combination(self):
+            output = b'\t 43\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mm", self.test_inputs), output)
+
+        def test_char_line_byte_combination(self):
+            output = b'\t 1\t 43\t 43\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mlc", self.test_inputs), output)
+
+        def test_char_line_word_combination(self):
+            output = b'\t 1\t 8\t 43\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mlw", self.test_inputs), output)
+
+        def test_char_line_word_combination(self):
+            output = b'\t 1\t 43\t 42\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mlL", self.test_inputs), output)
+
+        def test_char_line_word_byte_combination(self):
+            output = b'\t 1\t 8\t 43\t 43\t 42\t testinputs/test_3.txt\n'
+            return self.assertEqual(cmd_command("-mlLcw", self.test_inputs), output)
+
+
+class CharacterFlagCombinationMultipleFilesTestCases(unittest.TestCase):
+
+    test_inputs = ['testinputs/test_3.txt', 'testinputs/test_1.txt']
+    def test_char_lines_combination(self):
+        output = b'\t 1\t 43\t testinputs/test_3.txt\n\t 4\t 355\t ' \
+                 b'testinputs/test_1.txt\n\t 5\t 398\t total\n'
+        return self.assertEqual(cmd_command("-ml", self.test_inputs), output)
+
+    def test_char_byte_combination(self):
+        output = b'\t 43\t 43\t testinputs/test_3.txt\n\t 355\t 355\t ' \
+                 b'testinputs/test_1.txt\n\t 398\t 398\t total\n'
+        return self.assertEqual(cmd_command("-mc", self.test_inputs), output)
+
+    def test_char_word_combination(self):
+        output = b'\t 8\t 43\t testinputs/test_3.txt\n\t 21\t 355\t ' \
+                 b'testinputs/test_1.txt\n\t 29\t 398\t total\n'
+        return self.assertEqual(cmd_command("-mw", self.test_inputs), output)
+
+    def test_char_char_combination(self):
+        output = b'\t 43\t testinputs/test_3.txt\n\t 355\t ' \
+                 b'testinputs/test_1.txt\n\t 398\t total\n'
+        return self.assertEqual(cmd_command("-mm", self.test_inputs), output)
+
+    def test_char_line_byte_combination(self):
+        output = b'\t 1\t 43\t 43\t testinputs/test_3.txt\n\t 4\t 355\t 355\t ' \
+                 b'testinputs/test_1.txt\n\t 5\t 398\t 398\t total\n'
+        return self.assertEqual(cmd_command("-mlc", self.test_inputs), output)
+
+    def test_char_line_word_combination(self):
+        output = b'\t 1\t 8\t 43\t testinputs/test_3.txt\n\t 4\t 21\t 355\t ' \
+                 b'testinputs/test_1.txt\n\t 5\t 29\t 398\t total\n'
+        return self.assertEqual(cmd_command("-mlw", self.test_inputs), output)
+
+    def test_char_line_word_combination(self):
+        output = b'\t 1\t 43\t 42\t testinputs/test_3.txt\n\t 4\t 355\t 74\t ' \
+                 b'testinputs/test_1.txt\n\t 5\t 398\t 74\t total\n'
+        return self.assertEqual(cmd_command("-mlL", self.test_inputs), output)
+
+    def test_char_line_word_byte_combination(self):
+        output = b'\t 1\t 8\t 43\t 43\t 42\t ' \
+                 b'testinputs/test_3.txt\n\t 4\t 21\t 355\t 355\t 74\t testinputs/test_1.txt\n\t 5\t 29\t 398\t 398\t 74\t total\n'
+        return self.assertEqual(cmd_command("-mlLcw", self.test_inputs), output)
+
 
 if __name__ == '__main__':
     unittest.main()
