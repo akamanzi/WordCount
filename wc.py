@@ -6,6 +6,7 @@ line_flag = 'l'
 word_flag = 'w'
 byte_flag = 'c'
 max_length = "L"
+CHAR_FLAG = "m"
 version_flag = "version"
 
 results = []
@@ -66,6 +67,8 @@ def openfile(file_names, argument):
 						results.extend([num_of_lines])
 					if word_flag in argument:
 						results.extend([num_of_words])
+					if CHAR_FLAG in argument:
+						results.extend([f.tell()])
 					if byte_flag in argument:
 						results.extend([f.tell()])
 					if max_length in argument:
@@ -90,6 +93,8 @@ def openfile(file_names, argument):
 				results.extend([total_lines])
 			if word_flag in argument:
 				results.extend([total_words])
+			if CHAR_FLAG in argument:
+				results.extend([total_bytes])
 			if byte_flag in argument:
 				results.extend([total_bytes])
 			if max_length in argument:
@@ -136,6 +141,7 @@ def handle_arguments():
 	parser.add_argument("--version",  help="outputs version of wc", action='version',
 						version='%(prog)s 1.0')
 	parser.add_argument("-L", help="output length of the longest line", action='store_true')
+	parser.add_argument("-m", help="output number of characters in file", action='store_true')
 	parser.add_argument("filename", nargs='+')
 
 	if len(sys.argv) == 1:
@@ -151,7 +157,7 @@ def handle_arguments():
 	if args.w:
 		flag_list.append(word_flag)
 	if args.m:
-		flag_list.append()
+		flag_list.append(CHAR_FLAG)
 	if args.c:
 		flag_list.append(byte_flag)
 	if args.L:
