@@ -332,6 +332,18 @@ class CharacterFlagCombinationMultipleFilesTestCases(unittest.TestCase):
                  b'testinputs/test_3.txt\n\t 4\t 21\t 355\t 355\t 74\t testinputs/test_1.txt\n\t 5\t 29\t 398\t 398\t 74\t total\n'
         return self.assertEqual(cmd_command("-mlLcw", self.test_inputs), output)
 
+class Files0FromTestCases(unittest.TestCase):
+    testinput = ['files0-from.txt']
+    def test_files0from(self):
+        output = b"\t 344\t 1490\t 60813\t testinputs/Bob_dylan.jpeg\n\t 7\t 101\t 1249\t " \
+             b"testinputs/drawing_file.txt\n\t 19\t 83\t 1077\t testinputs/ethiopian.txt\n\t 199\t 993\t 13245\t " \
+             b"testinputs/file_1.txt\n\t 7\t 44\t 1115\t testinputs/georgian.txt\n\t 1\t 1\t 2\t " \
+             b"testinputs/new_line.txt\n\t 8\t 54\t 718\t testinputs/no_extension\n\t 7\t 28\t 492\t t" \
+             b"estinputs/test_1.py\n\t 5\t 21\t 355\t testinputs/test_1.txt\n\t 1\t 0\t 0\t " \
+             b"testinputs/test_2.txt\n\t 2\t 8\t 43\t testinputs/test_3.txt\n\t 5\t 26\t 654\t " \
+             b"testinputs/test_unicode.py\nwe don't handle that situation yet!\n\t 605\t 2849\t 79763\t total\n"
+
+        return self.assertEqual(cmd_command("--files0-from", self.testinput), output)
 
 if __name__ == '__main__':
     unittest.main()
