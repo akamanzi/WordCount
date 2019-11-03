@@ -206,9 +206,7 @@ class FileHandler:
 			return True
 		else:
 			return False
-	# for single_line in file_content.split(b'\x00'):
-	# 	print(single_line)
-	# 	print(len(single_line.split()))
+
 
 
 def print_results(results):
@@ -235,6 +233,4 @@ if __name__ == "__main__":
 	parsed_arguments_list = list_of_arguments.handle_arguments()
 	file_handler = FileHandler(parsed_arguments_list[0], parsed_arguments_list[1])
 	file_handler.openfiles()
-	#print(parsed_arguments_list[0], parsed_arguments_list[1])
-	#openfile(parsed_arguments_list[0], parsed_arguments_list[1])
 

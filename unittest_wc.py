@@ -115,10 +115,6 @@ class SingleFileMultipleFlagsTestCases(unittest.TestCase):
         return self.assertEqual(command,expected_output)
 
 
-
-
-
-
 class MissingArgumentsTestCases(unittest.TestCase):
 
     def test_empty_flag(self):
