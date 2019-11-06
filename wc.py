@@ -1,13 +1,12 @@
 import sys
 import argparse
 script_name = sys.argv[0]
-allowed_options = ['l', 'w', 'c']
-line_flag = 'l'
-word_flag = 'w'
-byte_flag = 'c'
-max_length = "L"
+allowed_options = ['l', 'w', 'c', 'L', 'm']
+LINE_FLAG = 'l'
+WORD_FLAG = 'w'
+BYTE_FLAG = 'c'
+MAX_LINE_LENGTH = "L"
 CHAR_FLAG = "m"
-version_flag = "version"
 
 results = []
 total_words = 0
@@ -92,15 +91,15 @@ class ArgumentHandler:
 		flag_list = []
 		list_of_arguments = []
 		if args.l:
-			flag_list.append(line_flag)
+			flag_list.append(LINE_FLAG)
 		if args.w:
-			flag_list.append(word_flag)
+			flag_list.append(WORD_FLAG)
 		if args.m:
 			flag_list.append(CHAR_FLAG)
 		if args.c:
-			flag_list.append(byte_flag)
+			flag_list.append(BYTE_FLAG)
 		if args.L:
-			flag_list.append(max_length)
+			flag_list.append(MAX_LINE_LENGTH)
 		if args.files0_from:
 			global is_file_from_flag_present
 			is_file_from_flag_present = True
@@ -141,15 +140,15 @@ class FileHandler:
 					if len(self.flags) >= 1:
 						global multiple_flags
 						multiple_flags = True
-						if line_flag in self.flags:
+						if LINE_FLAG in self.flags:
 							results.extend([num_of_lines])
-						if word_flag in self.flags:
+						if WORD_FLAG in self.flags:
 							results.extend([num_of_words])
 						if CHAR_FLAG in self.flags:
 							results.extend([byte_count])
-						if byte_flag in self.flags:
+						if BYTE_FLAG in self.flags:
 							results.extend([byte_count])
-						if max_length in self.flags:
+						if MAX_LINE_LENGTH in self.flags:
 							total_line_length += max_line_length
 							results.extend([max_line_length])
 						results.extend([file])
@@ -167,15 +166,15 @@ class FileHandler:
 			if no_flag:
 				results.extend([total_lines, total_words, total_bytes, 'total'])
 			if multiple_flags:
-				if line_flag in self.flags:
+				if LINE_FLAG in self.flags:
 					results.extend([total_lines])
-				if word_flag in self.flags:
+				if WORD_FLAG in self.flags:
 					results.extend([total_words])
 				if CHAR_FLAG in self.flags:
 					results.extend([total_bytes])
-				if byte_flag in self.flags:
+				if BYTE_FLAG in self.flags:
 					results.extend([total_bytes])
-				if max_length in self.flags:
+				if MAX_LINE_LENGTH in self.flags:
 					results.extend([max_line_length])
 				results.extend(['total'])
 			print_results(results)
