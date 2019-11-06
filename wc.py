@@ -59,6 +59,16 @@ class ArgumentHandler:
 		The options below may be used to select which counts are printed, always in
 		the following order: newline, word, character, byte, maximum line length."""
 
+		version_message = "wc (GNU coreutils) 8.21" \
+						  "Copyright (C) 2013 Free Software Foundation, Inc." \
+						  "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>." \
+						  "This is free software: you are free to change and redistribute it." \
+						  "There is NO WARRANTY, to the extent permitted by law"
+
+		help_flag_message = "read input from the files specified by" \
+							"NUL-terminated names in file F;" \
+							"If F is - then read names from standard input"
+
 		parser = argparse.ArgumentParser(description=help_message,
 										 add_help=False)
 		parser.add_argument("-l", help="output number of lines", action='store_true')
@@ -67,10 +77,10 @@ class ArgumentHandler:
 		parser.add_argument("--help", help="outputs help message", action='help',
 							default=argparse.SUPPRESS)
 		parser.add_argument("--version", help="outputs version of wc", action='version',
-							version='%(prog)s 1.0')
+							version=version_message)
 		parser.add_argument("-L", help="output length of the longest line", action='store_true')
 		parser.add_argument("-m", help="output number of characters in file", action='store_true')
-		parser.add_argument("--files0-from", action='store_true')
+		parser.add_argument("--files0-from", action='store_true', help=help_flag_message)
 		parser.add_argument("filename", nargs='+')
 
 		if len(sys.argv) == 1:
