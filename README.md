@@ -1,5 +1,5 @@
 # WordCount
-Unix wc clone written in python - The program takes a file as an input and returns number of lines, words and bytes of the file passed
+Unix wc clone written in python - The program takes a file as an input and returns number of lines, words and bytes of the file passed. the program can also read multiple files passed together
 
 
 ## How to run the program
@@ -47,4 +47,8 @@ just like Unix's wc, this program accepts options:
 ## Python Versions
 
 - Compatible with python 3.3 and above 
+
+## Known Issues:
+
+- The program does not return bytes and words accurate values when given binary files.
 
