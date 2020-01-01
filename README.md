@@ -9,35 +9,35 @@ Unix wc clone written in python - The program takes a file as an input and retur
 ## OPtions
 just like Unix's wc, this program accepts options:
 
--L, -l: for displaying number of lines in a passed file
+`-L, -l`: for displaying number of lines in a passed file
 
 ##### Usage: `Python3 wc.py -L file_name`
 
--w: displays number of words in a given file
+`-w`: displays number of words in a given file
 
 ##### Usage: `Python3 wc.py -w file_name`
 
--c: displays number of bytes of a given file
+`-c`: displays number of bytes of a given file
 
 ##### Usage: `Python3 wc.py -c file_name`
 
--L: displays length of the longest line in a given file
+`-L`: displays length of the longest line in a given file
 
 ##### Usage: `Python3 wc.py -L file_name`
 
---help: help for how the program is used
+`--help`: help for how the program is used
 
 ##### Usage: `Python3  wc.py --help`
 
---version: displays version wc program
+`--version`: displays version wc program
 
 ##### Usage: `Python3  wc.py --version`
 
---files0-from: read input from NUL terminated files
+`--files0-from`: read input from NUL terminated files
 
 ##### Usage: `Python3  wc.py --files0-from file_name`
 
--: reads from standard input
+`-`: reads from standard input
 
 ##### Usage: `Python3  wc.py`
 
@@ -50,5 +50,5 @@ just like Unix's wc, this program accepts options:
 
 ## Known Issues:
 
-- The program does not return bytes and words accurate values when given binary files.
+- The program does not return accurate values of bytes and words when passed with binary files.
 
