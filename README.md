@@ -2,11 +2,23 @@
 Unix wc clone written in python - The program takes a file as an input and returns number of lines, words and bytes of the file passed. the program can also read multiple files passed together
 
 
+## Download Program
+
+To use the program, firt clone the project using below shown code:
+
+`git clone https://github.com/akamanzi/WordCount.git`
+
 ## How to run the program
 
-`Python3 wc.py file_name`
+Navigate to the project root directory `cd WordCount`. In order to run the program, use the command below:
 
-## OPtions
+`Python3 wc.py path_to_file_name`
+
+You could also run the program using any of the sample files located in the `testinputs` directory as indicated belwo:
+
+`Python3 wc.py testinputs/test_1.txt`
+
+## Using Flags
 just like Unix's wc, this program accepts options:
 
 `-L, -l`: for displaying number of lines in a passed file
