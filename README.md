@@ -43,6 +43,17 @@ just like Unix's wc, this program accepts options:
 
 
 
+## Runnning Test
+
+This program uses `unittest` testing framework. in order to run tests use the `-m` flag to specify `unittest` framework as below:
+
+`Python3 -m unittest unittest_wc.py`
+
+Additionally you could also run the doctests by running the following command:
+
+`Python3 doctest_unit_wc.py`
+
+#### NOTE: all the commands above should be run in the root directory. Test files used are located in the `testinputs` directory.
 
 ## Python Versions
 
